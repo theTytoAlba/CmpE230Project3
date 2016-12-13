@@ -1,11 +1,12 @@
 #include "statstable.h"
 #include "ui_statstable.h"
 
-StatsTable::StatsTable(QWidget *parent) :
+StatsTable::StatsTable(QWidget *parent, QTextBrowser *highestScore) :
     QWidget(parent),
     ui(new Ui::statstable)
 {
     ui->setupUi(this);
+    this->highestScore = highestScore;
     p1Time = 0;
     p2Time = 0;
     p1Score = 0;
@@ -19,8 +20,14 @@ StatsTable::StatsTable(QWidget *parent) :
 void StatsTable::increaseScore(int playerNo) {
     if (playerNo == 1) {
         ui->P1Score->setText(QString::number(++p1Score));
+        if (highestScore->toPlainText().toInt() < p1Score) {
+            highestScore->setText(QString::number(p1Score));
+        }
     } else {
         ui->P2Score->setText(QString::number(++p2Score));
+        if (highestScore->toPlainText().toInt() < p2Score) {
+            highestScore->setText(QString::number(p2Score));
+        }
     }
     return;
 }

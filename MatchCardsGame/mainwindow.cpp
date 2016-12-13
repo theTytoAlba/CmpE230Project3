@@ -17,7 +17,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 void MainWindow::initialize(void) {
     // initialize game stats
-    StatsTable *stats = new StatsTable(ui->statsStackedWidget);
+    StatsTable *stats = new StatsTable(ui->statsStackedWidget, ui->HighestScore);
     ui->statsStackedWidget->addWidget(stats);
     statsTableVector.push_back(stats);
     ui->statsStackedWidget->setCurrentWidget(statsTableVector.at(0));
@@ -37,11 +37,11 @@ void MainWindow::newGame() {
 
     // initialize new game stats if it is not the first game
     if (gameNo != 1) {
-        StatsTable *stats = new StatsTable(ui->statsStackedWidget);
+        StatsTable *stats = new StatsTable(ui->statsStackedWidget, ui->HighestScore);
         ui->statsStackedWidget->addWidget(stats);
         statsTableVector.push_back(stats);
-        ui->statsStackedWidget->setCurrentWidget(statsTableVector.at(gameNo-1));
     }
+        ui->statsStackedWidget->setCurrentWidget(statsTableVector.at(gameNo-1));
 
     // initialize a new game
     CardsTable *cards = new CardsTable(ui->cardsStackedWidget, gameNo, statsTableVector.back());
