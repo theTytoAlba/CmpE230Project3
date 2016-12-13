@@ -19,6 +19,8 @@ public:
 
 private slots:
     void newGame();
+    void prevGame();
+    void nextGame();
 
 private:
     Ui::MainWindow *ui;

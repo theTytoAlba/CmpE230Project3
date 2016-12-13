@@ -13,6 +13,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     initialize();
     connect(ui->NewGame, SIGNAL(pressed()), this, SLOT(newGame()));
+    connect(ui->PrevResults, SIGNAL(pressed()), this, SLOT(prevGame()));
+    connect(ui->NextResults, SIGNAL(pressed()), this, SLOT(nextGame()));
 }
 
 void MainWindow::initialize(void) {
@@ -33,15 +35,15 @@ void MainWindow::initialize(void) {
 }
 
 void MainWindow::newGame() {
-    gameNo++;
+    gameNo = cardsTableVector.size() + 1;
 
     // initialize new game stats if it is not the first game
     if (gameNo != 1) {
         StatsTable *stats = new StatsTable(ui->statsStackedWidget, ui->HighestScore);
         ui->statsStackedWidget->addWidget(stats);
         statsTableVector.push_back(stats);
-    }
         ui->statsStackedWidget->setCurrentWidget(statsTableVector.at(gameNo-1));
+    }
 
     // initialize a new game
     CardsTable *cards = new CardsTable(ui->cardsStackedWidget, gameNo, statsTableVector.back());
@@ -65,6 +67,30 @@ void MainWindow::newGame() {
         randomCards.erase(randomCards.begin() + index);
     }
     cards->setCardsBelow(randCardsToSend);
+}
+
+void MainWindow::prevGame() {
+    //if there is no previous game, return.
+    if (gameNo == 1) {
+        return;
+    }
+
+    gameNo--;
+    ui->GameNo->setText(QString::number(gameNo));
+    ui->cardsStackedWidget->setCurrentWidget(cardsTableVector.at(gameNo-1));
+    ui->statsStackedWidget->setCurrentWidget(statsTableVector.at(gameNo-1));
+}
+
+void MainWindow::nextGame() {
+    //if there is no next game, return.
+    if (gameNo == cardsTableVector.size()) {
+        return;
+    }
+
+    gameNo++;
+    ui->GameNo->setText(QString::number(gameNo));
+    ui->cardsStackedWidget->setCurrentWidget(cardsTableVector.at(gameNo-1));
+    ui->statsStackedWidget->setCurrentWidget(statsTableVector.at(gameNo-1));
 }
 
 MainWindow::~MainWindow()
